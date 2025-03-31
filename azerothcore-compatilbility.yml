@@ -1,0 +1,30 @@
+---
+- name: Check system compatibility
+  hosts: all
+  gather_facts: yes
+  become: false
+
+  vars:
+    supported_debian_versions:
+      - "11"
+      - "12"
+    supported_ubuntu_versions:
+      - "20.04"
+      - "22.04"
+      - "24.04"
+
+  tasks:
+    - name: Fail if not a supported Debian or Ubuntu system
+      fail:
+        msg: >-
+          Unsupported system: {{ ansible_distribution }} {{ ansible_distribution_version }}.
+          Supported are Debian 11/12 and Ubuntu 20.04/22.04 LTS.
+      when: >
+        not (
+          (ansible_distribution == "Debian" and ansible_distribution_major_version in supported_debian_versions) or
+          (ansible_distribution == "Ubuntu" and ansible_distribution_version in supported_ubuntu_versions)
+        )
+
+    - name: Print success message if compatible
+      debug:
+        msg: "System is compatible: {{ ansible_distribution }} {{ ansible_distribution_version }}"
