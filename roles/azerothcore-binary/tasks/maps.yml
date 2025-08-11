@@ -1,13 +1,14 @@
 ---
 
 - name: Create the required directory for our mmaps, vmaps, etc.
-  file:
+  ansible.builtin.file:
     path: "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_server_release }}/bin/data"
+    mode: "0755"
     state: directory
 
 - name: Download and unarchive the pre-made map data
   ansible.builtin.unarchive:
     src: "{{ azerothcore_map_data_url }}"
     dest: "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_server_release }}/bin/data"
-    remote_src: yes
+    remote_src: true
     creates: "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_server_release }}/bin/data/mmaps"

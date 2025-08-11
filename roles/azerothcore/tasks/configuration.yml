@@ -14,6 +14,7 @@
   file:
     path: "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_server_release }}/bin/etc/modules"
     state: directory
+    mode: "0755"
   tags:
     - configuration
 

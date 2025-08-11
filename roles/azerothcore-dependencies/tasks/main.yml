@@ -1,26 +1,37 @@
 ---
 
+# - name: Run acore dependencies setup secript
+#   ansible.builtin.include_tasks: "tasks/acore-dependencies.yml"
+#   tags:
+#     - packages
+#     - mysql
+
 - name: Update packages and install dependencies
-  include_tasks: "tasks/packages.yml"
+  ansible.builtin.include_tasks: "tasks/01_packages.yml"
   tags:
     - packages
 
+- name: Install MySQL server
+  ansible.builtin.include_tasks: "tasks/02_mysql-server.yml"
+  tags:
+    - mysql
+
 - name: Set up our AzerothCore user
-  include_tasks: "tasks/user.yml"
+  ansible.builtin.include_tasks: "tasks/03_user.yml"
   tags:
     - user
 
 - name: Set up sudoers for our AzerothCore Linux user
-  include_tasks: "tasks/sudoers.yml"
+  ansible.builtin.include_tasks: "tasks/04_sudoers.yml"
   tags:
     - sudoers
 
 - name: Setup MySQL with our user
-  include_tasks: "tasks/mysql.yml"
+  ansible.builtin.include_tasks: "tasks/05_mysql.yml"
   tags:
     - mysql
 
 - name: Include task for systemd
-  include_tasks: "tasks/systemd.yml"
+  ansible.builtin.include_tasks: "tasks/06_systemd.yml"
   tags:
     - systemd

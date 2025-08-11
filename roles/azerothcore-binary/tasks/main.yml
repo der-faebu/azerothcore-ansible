@@ -1,17 +1,17 @@
 ---
 
 - name: Include task for downloading binaries
-  include_tasks: "tasks/binary.yml"
+  ansible.builtin.include_tasks: "tasks/binary.yml"
   tags:
     - binary
 
 - name: Include task for maps
-  include_tasks: "tasks/maps.yml"
+  ansible.builtin.include_tasks: "tasks/maps.yml"
   tags:
     - maps
 
 - name: Include task for configuration
-  include_tasks: "tasks/configuration.yml"
+  ansible.builtin.include_tasks: "tasks/configuration.yml"
   tags:
     - configuration
 
@@ -19,11 +19,11 @@
 # SQL files and some other data used by the auth and world
 # servers.
 - name: Include task for downloading the AzerothCore source
-  include_tasks: "tasks/source.yml"
+  ansible.builtin.include_tasks: "tasks/source.yml"
   tags:
     - source
 
 - name: Include task for downloading the AzerothCore modules
-  include_tasks: "tasks/modules.yml"
+  ansible.builtin.include_tasks: "tasks/modules.yml"
   tags:
     - modules

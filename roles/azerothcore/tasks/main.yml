@@ -1,36 +1,39 @@
 ---
-
 - name: Include task for downloading the AzerothCore source
-  include_tasks: "tasks/source.yml"
-  when: azerothcore_deployment_type == 'source'
+  ansible.builtin.include_tasks: "tasks/source.yml"
   tags:
     - source
 
 - name: Include task for downloading the AzerothCore modules
-  include_tasks: "tasks/modules.yml"
-  when: azerothcore_deployment_type == 'source'
+  ansible.builtin.include_tasks: "tasks/modules.yml"
   tags:
     - modules
 
 - name: Include task for building
-  include_tasks: "tasks/build.yml"
+  ansible.builtin.include_tasks: "tasks/build.yml"
   when: azerothcore_deployment_type == 'source'
   tags:
     - build
 
+- name: Include task for local building
+  ansible.builtin.include_tasks: "tasks/local-build.yml"
+  when: azerothcore_build_type == 'local'
+  tags:
+    - local-build
+
 - name: Include task for downloading binaries
-  include_tasks: "tasks/binary.yml"
+  ansible.builtin.include_tasks: "tasks/binary.yml"
   when: azerothcore_deployment_type == 'binary'
   tags:
     - binary
 
 - name: Include task for maps
-  include_tasks: "tasks/maps.yml"
+  ansible.builtin.include_tasks: "tasks/maps.yml"
   tags:
     - maps
 
 - name: Include task for configuration
-  include_tasks: "tasks/configuration.yml"
+  ansible.builtin.include_tasks: "tasks/configuration.yml"
   tags:
     - configuration
 

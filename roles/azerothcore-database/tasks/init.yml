@@ -1,25 +1,29 @@
 ---
 
 - name: Create the database directory
-  file:
+  ansible.builtin.file:
     path: "{{ sql_dir }}"
     state: directory
+    mode: "0755"
   tags:
-   - database-init
+    - database-init
 
 # Creates the base databases
 - name: Upload our SQL files
-  template:
+  ansible.builtin.template:
     src: "{{ item }}"
     dest: "{{ sql_dir }}/{{ item }}"
+    mode: "0644"
   loop:
     - init.sql
     - custom.sql
     - realmlist_update.sql
   tags:
-   - database-init
+    - database-init
 
 - name: Run a raw mysql commands to bootstrap the server
-  shell: "mysql -u {{azerothcore_db_user}} --password={{azerothcore_db_password}} < {{ sql_dir }}/init.sql"
+  ansible.builtin.shell: "mysql -u {{ azerothcore_db_user }} --password={{ azerothcore_db_password }} < {{ sql_dir }}/init.sql"
+  register: mysql_init
+  changed_when: mysql_init.rc != 0
   tags:
-   - database-init
+    - database-init

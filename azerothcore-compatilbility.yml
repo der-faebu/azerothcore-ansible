@@ -1,7 +1,7 @@
 ---
 - name: Check system compatibility
   hosts: all
-  gather_facts: yes
+  gather_facts: true
   become: false
 
   vars:
@@ -15,7 +15,7 @@
 
   tasks:
     - name: Fail if not a supported Debian or Ubuntu system
-      fail:
+      ansible.builtin.fail:
         msg: >-
           Unsupported system: {{ ansible_distribution }} {{ ansible_distribution_version }}.
           Supported are Debian 11/12 and Ubuntu 20.04/22.04 LTS.
@@ -26,5 +26,5 @@
         )
 
     - name: Print success message if compatible
-      debug:
+      ansible.builtin.debug:
         msg: "System is compatible: {{ ansible_distribution }} {{ ansible_distribution_version }}"

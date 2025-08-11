@@ -1,0 +1,40 @@
+---
+- name: Install general packages
+  ansible.builtin.apt:
+    update_cache: true
+    name:
+      - htop
+      - wget
+      - curl
+      - nala
+      - unzip
+      - net-tools
+      - vim
+      - git
+
+- name: Install package dependencies (for compiling)
+  tags:
+    - build
+  delegate_to: "{{ azerothcore_build_server }}"
+  ansible.builtin.apt:
+    update_cache: true
+    name:
+      - gdbserver
+      - gdb
+      - unzip
+      - curl
+      - libncurses-dev
+      - libreadline-dev
+      - clang
+      - g++
+      - gcc
+      - git
+      - cmake
+      - make
+      - ccache
+      - libssl-dev
+      - libbz2-dev
+      - libboost-all-dev
+      - gnupg
+      - wget
+      - libstdc++-12-dev # required but not listed on AzerothCore website

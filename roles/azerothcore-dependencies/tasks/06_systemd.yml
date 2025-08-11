@@ -1,8 +1,9 @@
 ---
 - name: Parse and upload our unit files
-  template:
+  ansible.builtin.template:
     src: "etc/systemd/system/{{ item }}.service"
     dest: "/etc/systemd/system/{{ item }}.service"
+    mode: '0644'
   loop:
     - authserver
     - worldserver
@@ -10,11 +11,11 @@
     - systemd
 
 - name: Enable and STOP both services
-  systemd_service:
+  ansible.builtin.systemd_service:
     name: "{{ item }}"
     state: stopped
-    enabled: yes
-    daemon_reexec: yes
+    enabled: true
+    daemon_reexec: true
   loop:
     - authserver
     - worldserver

@@ -1,6 +1,8 @@
 ---
 
 - name: Run our custom/ad-hoc SQL file
-  shell: "mysql -u {{azerothcore_db_user}} --password={{azerothcore_db_password}} acore_auth < {{ sql_dir }}/custom.sql"
+  ansible.builtin.shell: "mysql -u {{ azerothcore_db_user }} --password={{ azerothcore_db_password }} acore_auth < {{ sql_dir }}/custom.sql"
+  register: custom_sql
+  changed_when: custom_sql.rc != 0
   tags:
     - database-custom

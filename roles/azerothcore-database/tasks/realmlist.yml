@@ -2,6 +2,6 @@
 
 # Update realm list
 - name: Update the realm list with our server
-  shell: "mysql -u {{azerothcore_db_user}} --password={{azerothcore_db_password}} acore_auth < {{ sql_dir }}/realmlist_update.sql"
+  ansible.builtin.shell: "mysql -u {{ azerothcore_db_user }} --password={{ azerothcore_db_password }} acore_auth < {{ sql_dir }}/realmlist_update.sql"
   tags:
-    - database-realmlist
+     - database-realmlist

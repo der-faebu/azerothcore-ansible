@@ -1,0 +1,26 @@
+---
+
+- name: Download latest MySQL APT config package using wget
+  ansible.builtin.shell: >
+    wget -q -O /tmp/mysql-apt-config.deb https://dev.mysql.com/get/mysql-apt-config_0.8.32-1_all.deb
+  args:
+    creates: /tmp/mysql-apt-config.deb
+
+- name: Install MySQL APT config package (non-interactively)
+  ansible.builtin.command: dpkg -i /tmp/mysql-apt-config.deb
+  args:
+    creates: /etc/apt/sources.list.d/mysql.list
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+
+- name: Update APT cache after adding MySQL repo
+  ansible.builtin.apt:
+    update_cache: true
+  when: ansible_distribution in ["Debian", "Ubuntu"]
+
+- name: Install MySQL server and libmysqlclient-dev
+  ansible.builtin.apt:
+    name:
+      - mysql-server
+      - libmysqlclient-dev
+    state: present

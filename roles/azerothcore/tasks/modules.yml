@@ -1,17 +1,18 @@
 ---
-
 - name: Fetch and download our desired modules
-  git:
+  delegate_to: "{{ azerothcore_build_server }}"
+  ansible.builtin.git:
     repo: "{{ item.git }}"
     dest: "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_source_dest_dir }}/modules/{{ item.name }}"
     version: "{{ item.version }}"
-    force: yes
+    force: true
   loop: "{{ azerothcore_modules }}"
   tags:
     - modules
 
 - name: Look for LUA scripts to copy
-  find:
+  delegate_to: "{{ azerothcore_build_server }}"
+  ansible.builtin.find:
     paths:
       - "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_source_dest_dir }}/modules/"
     patterns:
@@ -23,8 +24,9 @@
     - modules
 
 - name: Copy them across to our final destination
-  copy:
-    remote_src: yes
+  delegate_to: "{{ azerothcore_build_server }}"
+  ansible.builtin.copy:
+    remote_src: true
     src: "{{ item.path }}"
     dest: "{{ root }}/bin/lua_scripts"
   loop: "{{ lua_scripts.files }}"

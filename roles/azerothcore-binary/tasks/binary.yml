@@ -1,29 +1,43 @@
 ---
-
 - name: Create the required directory for our binaries and configs
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: directory
+    mode: "0755"
   loop:
     - "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_server_release }}/bin"
     - "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_server_release }}/bin/etc/modules"
 
 - name: Check if the worldserver has been downloaded
-  stat:
+  ansible.builtin.stat:
     path: "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_server_release }}/bin/worldserver"
   register: worldserver_binary
 
 - name: Check if the authserver has been downloaded
-  stat:
+  ansible.builtin.stat:
     path: "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_server_release }}/bin/authserver"
   register: authserver_binary
 
+- name: Copy the binaries
+  ansible.builtin.copy:
+    src: "{{ azerothcore_binary.path }}"
+    dest: "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_server_release }}/bin/"
+    mode: "0770"
+  when:
+    - not worldserver_binary.stat.exists and not authserver_binary.stat.exists
+    - azerothcore_binary.path is defined
+  loop:
+    - "worldserver"
+    - "authserver"
+
 - name: Download the binaries
   ansible.builtin.get_url:
-    url: "https://github.com/Upload-Academy/azerothcore-ansible/releases/download/v0.1.0/{{ item }}"
+    url: "{{ azerothcore_binary.url }}"
     dest: "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_server_release }}/bin/"
-    mode: '0770'
-  when: not worldserver_binary.stat.exists and not authserver_binary.stat.exists
+    mode: "0770"
+  when:
+    - not worldserver_binary.stat.exists and not authserver_binary.stat.exists
+    - azerothcore_binary.path is not defined and azerothcore_binary.url is defined
   loop:
     - "worldserver"
     - "authserver"

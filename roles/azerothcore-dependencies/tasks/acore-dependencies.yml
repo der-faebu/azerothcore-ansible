@@ -1,0 +1,8 @@
+- name: Run acore dependencies script
+  shell: "./acore.sh 1"
+  become: true
+  args:
+    chdir: "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_source_dest_dir }}/"
+  tags:
+    - build
+    - source

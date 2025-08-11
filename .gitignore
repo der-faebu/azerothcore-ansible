@@ -3,3 +3,5 @@ venv/
 develop.txt
 group_vars/develop.yml
 override.yml
+.python-version
+uv.lock

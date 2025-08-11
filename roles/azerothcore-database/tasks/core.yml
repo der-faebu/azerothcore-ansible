@@ -1,9 +1,9 @@
 ---
 
 - name: Find all of the db_auth core SQL files
-  find:
+  ansible.builtin.find:
     paths:
-      - "{{ root }}/{{ azerothcore_source_dest_dir }}/data/sql/base/db_auth/"
+      - "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_source_dest_dir }}/data/sql/base/db_auth/"
     patterns:
       - "*.sql"
     file_type: file
@@ -13,45 +13,51 @@
     - database-auth
 
 - name: Find all of the db_world core SQL files
-  find:
-   paths:
-     - "{{ root }}/{{ azerothcore_source_dest_dir }}/data/sql/base/db_world/"
-   patterns:
-     - "*.sql"
+  ansible.builtin.find:
+    paths:
+      - "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_source_dest_dir }}/data/sql/base/db_world/"
+    patterns:
+      - "*.sql"
   register: db_world_sql_files
   tags:
-   - database-core
-   - database-world
+    - database-core
+    - database-world
 
 - name: Find all of the db_characters core SQL files
-  find:
-   paths:
-     - "{{ root }}/{{ azerothcore_source_dest_dir }}/data/sql/base/db_characters/"
-   patterns:
-     - "*.sql"
+  ansible.builtin.find:
+    paths:
+      - "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_source_dest_dir }}/data/sql/base/db_characters/"
+    patterns:
+      - "*.sql"
   register: db_characters_sql_files
   tags:
-   - database-core
-   - database-characters
+    - database-core
+    - database-characters
 
 # Core database tables for everything
 - name: Find and run the base AzerothCore SQL files - db_auth
-  shell: "mysql -u {{azerothcore_db_user}} --password={{azerothcore_db_password}} acore_auth < {{ item.path }}"
+  ansible.builtin.shell: "mysql -u {{ azerothcore_db_user }} --password={{ azerothcore_db_password }} acore_auth < {{ item.path }}"
+  register: db_auth
+  changed_when: db_auth.rc != 0
   with_items: "{{ db_auth_sql_files.files }}"
   tags:
     - database-core
     - database-auth
 
 - name: Find and run the base AzerothCore SQL files - db_world
-  shell: "mysql -u {{azerothcore_db_user}} --password={{azerothcore_db_password}} acore_world < {{ item.path }}"
+  ansible.builtin.shell: "mysql -u {{ azerothcore_db_user }} --password={{ azerothcore_db_password }} acore_world < {{ item.path }}"
+  register: db_world
+  changed_when: db_world.rc != 0
   with_items: "{{ db_world_sql_files.files }}"
   tags:
-   - database-core
-   - database-world
+    - database-core
+    - database-world
 
 - name: Find and run the base AzerothCore SQL files - db_characters
-  shell: "mysql -u {{azerothcore_db_user}} --password={{azerothcore_db_password}} acore_characters < {{ item.path }}"
+  ansible.builtin.shell: "mysql -u {{ azerothcore_db_user }} --password={{ azerothcore_db_password }} acore_characters < {{ item.path }}"
+  register: db_chars
+  changed_when: db_chars.rc != 0
   with_items: "{{ db_characters_sql_files.files }}"
   tags:
-   - database-core
-   - database-characters
+    - database-core
+    - database-characters

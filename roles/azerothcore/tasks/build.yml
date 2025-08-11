@@ -1,16 +1,38 @@
 ---
-
 - name: Move our compile script into place
-  template:
+  ansible.builtin.template:
     src: compile.sh
     dest: "{{ home }}/{{ azerothcore_folder }}/compile.sh"
     mode: "0775"
+  delegate_to: "{{ azerothcore_build_server }}"
   tags:
     - build
+    - source
+
+- name: Move module DB scripts
+  ansible.builtin.template:
+    src: sql/copy_db_files.sh
+    dest: "{{ home }}/{{ azerothcore_folder }}/copy_db_files.sh"
+    mode: "0775"
+  delegate_to: "{{ azerothcore_build_server }}"
+  tags:
+    - build
+    - source
 
 - name: Run our compile script
-  shell: "./compile.sh > compile.log"
+  ansible.builtin.shell: "./compile.sh > compile.log"
   args:
     chdir: "{{ home }}/{{ azerothcore_folder }}/"
+  delegate_to: "{{ azerothcore_build_server }}"
   tags:
     - build
+    - source
+
+- name: Run module DB scripts
+  ansible.builtin.shell: "./copy_db_files.sh > copy_db_files.log"
+  args:
+    chdir: "{{ home }}/{{ azerothcore_folder }}/"
+  delegate_to: "{{ azerothcore_build_server }}"
+  tags:
+    - build
+    - source

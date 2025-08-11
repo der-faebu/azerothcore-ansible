@@ -1,6 +1,7 @@
 ---
 
-- hosts: all
-  become: yes
+- name: Install dependencies for AzerothCore
+  hosts: all
+  become: true
   roles:
     - azerothcore-dependencies

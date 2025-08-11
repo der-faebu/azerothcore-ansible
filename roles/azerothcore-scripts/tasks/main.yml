@@ -1,13 +1,14 @@
 ---
 
 - name: Copy all LUA script into place and restart the server
-  copy:
+  ansible.builtin.copy:
     src: "scripts/{{ item }}"
     dest: "{{ root }}/bin/lua_scripts/"
+    mode: "0644"
   loop: "{{ azerothcore_scripts }}"
 
 - name: Restart the World Server
-  systemd_service:
+  ansible.builtin.systemd_service:
     name: worldserver
     state: restarted
     scope: user

@@ -10,18 +10,26 @@ azerothcore_folder: "azerothcore-wotlk-source"
 # Use "binary" if you don't care about
 # compiling. This will save you a lot of
 # waiting time.
-#
-# "source" is very slow but allows you to
-#load custom modules.
-azerothcore_deployment_type: "source"
-#azerothcore_deployment_type: "source"
+# path will take precedence over url
+
+azerothcore_binary:
+  # path takes precedence over url
+  path: "../bin/{{ item }}"
+  url: "https://github.com/Upload-Academy/azerothcore-ansible/releases/download/v0.1.0/{{ item }}"
+  use_precompiled: false
+# "source" is very slow but allows you to load custom modules.
+
+azerothcore_deployment_type: "source" # "source" or "binary"
+# azerothcore_build_server: "{{ ansible_hostname }}" # "localhost" or "{{ ansible_hostname }}"
+azerothcore_build_server: "localhost" # "localhost" or "{{ ansible_hostname }}"
 
 # Where the source code is downloaded to
 azerothcore_source_dest_dir: "src"
 
 # the Linux user used to run AzerothCore via. You SSH into this user to manage
 # the services, too
-azerothcore_user: azerothcore
+# azerothcore_user: azerothcore
+azerothcore_user: faebu
 azerothcore_user_ssh_keys:
   - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDH1ZRIYzldtBmfF7HLluU3U3j6DronkzDr9yNvevxPE faebu-admin@infra.gygax.tech"
 
@@ -33,7 +41,7 @@ sql_dir: "{{ home }}/{{ azerothcore_folder }}/sql"
 
 # realmlist - the address of where your server runs and the name for it
 azerothcore_realmlist_name: "World of Solocraft"
-azerothcore_realmlist_ip: "192.168.176.128"
+azerothcore_realmlist_ip: "172.19.1.11"
 azerothcore_realmlist_local_ip: "127.0.0.1"
 azerothcore_realmlist_port: "8085"
 azerothcore_realmlist_auth_port: "3724"
@@ -67,19 +75,21 @@ azerothcore_server_release: "{{azerothcore_branch}}"
 azerothcore_tools: "1"
 
 # enable debugging (recommended for development only), '1' (true) or '0' (false)
-azerothcore_debug: "0"
+azerothcore_debug: "1"
 
 # compiler to use, you can reference whatever you prefer
 azerothcore_compiler: "/usr/bin/clang"
 azerothcore_compiler_xx: "/usr/bin/clang++"
 
 # cronjob for backup, multiple values can be listed such as "3,5,12" etc., leave empty to not setup backup
-azerothcore_cron_minute: "0"
-azerothcore_cron_hour: "7"
+azerothcore_cron_minute: ""
+azerothcore_cron_hour: ""
 
 ####
 # Source related locations and URLs
 ####
+
+# pre-compiled binaries
 
 # where to get the source code from
 #azerothcore_git: "https://github.com/azerothcore/azerothcore-wotlk.git"
@@ -92,23 +102,41 @@ azerothcore_map_data_url: "https://github.com/wowgaming/client-data/releases/dow
 # Use the https:// clone link, not the git:// one
 azerothcore_modules:
   - name: mod-challenge-modes
-    git: https://github.com/ZhengPeiRu21/mod-challenge-modes
+    git: https://github.com/ZhengPeiRu21/mod-challenge-modes.git
     version: master
+    enabled: true
+
   - name: mod-eluna
     git: https://github.com/azerothcore/mod-eluna.git
     version: master
+    enabled: true
+
   - name: mod-playerbots
     git: https://github.com/der-faebu/mod-playerbots.git
     version: master
+    enabled: true
+ 
   - name: mod-solocraft
     git: https://github.com/azerothcore/mod-solocraft.git
     version: master
+    enabled: false
+
   - name: mod-ah-bot
     git: https://github.com/azerothcore/mod-ah-bot.git
     version: master
+    enabled: false
+
   - name: mod-aoe-loot
     git: https://github.com/azerothcore/mod-aoe-loot.git
     version: master
+    enabled: false
+
   - name: mod-reagent-bank
-    git: https://github.com/ZhengPeiRu21/mod-reagent-bank
+    git: https://github.com/ZhengPeiRu21/mod-reagent-bank.git
     version: master
+    enabled: false
+
+  - name: mod-autobalance
+    git: https://github.com/azerothcore/mod-autobalance.git
+    version: master
+    enabled: false

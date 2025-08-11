@@ -1,13 +1,15 @@
 ---
 
-- hosts: all
-  become: no
+- name: Install AzerothCore from binaries
+  hosts: all
+  become: false
 
   pre_tasks:
     - name: Ensure all target directories are set up on the remote server
-      file:
+      ansible.builtin.file:
         path: "{{ item }}"
         state: directory
+        mode: "0755"
       loop:
         - "{{ temp }}"
         - "{{ sql_dir }}"
@@ -16,7 +18,7 @@
         - "{{ root }}/bin/etc/modules"
 
     - name: Set up the databases - world, auth, characters
-      import_role:
+      ansible.builtin.import_role:
         name: azerothcore-database
         tasks_from: init
 
