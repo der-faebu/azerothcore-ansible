@@ -1,9 +1,22 @@
 ---
+- name: Ensure Checkout path exists
+  ansible.builtin.file:
+    path: "{{ azerothcore_checkout_path }}/{{ azerothcore_source_dir }}"
+    state: directory
+    mode: "0755"
+    owner: "{{ azerothcore_user }}"
+    group: "{{ azerothcore_user }}"
+  tags:
+    - build
+  become: true
+  delegate_to: "{{ azerothcore_build_server }}"
+
 - name: Checkout AzerothCore code
   delegate_to: "{{ azerothcore_build_server }}"
   ansible.builtin.git:
     repo: "{{ azerothcore_git }}"
-    dest: "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_source_dest_dir }}"
+    dest: "{{ azerothcore_checkout_path }}/{{ azerothcore_source_dir }}"
+    # dest: "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_source_dest_dir }}"
     version: "{{ azerothcore_branch }}"
     force: "{{ azerothcore_git_force }}"
     single_branch: true
@@ -15,13 +28,15 @@
 - name: Register variable for modules base path
   delegate_to: "{{ azerothcore_build_server }}"
   ansible.builtin.set_fact:
-    azerothcore_modules_base_path: "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_source_dest_dir }}/modules"
+    # azerothcore_modules_base_path: "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_source_dest_dir }}/modules"
+    azerothcore_modules_base_path: "{{ azerothcore_checkout_path }}/{{ azerothcore_source_dir }}/modules"
   tags:
     - build
 
 - name: Get the latest (short) Git commit tag
   delegate_to: "{{ azerothcore_build_server }}"
-  ansible.builtin.shell: cd "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_source_dest_dir }}" && git rev-parse --short=6 $(git rev-parse HEAD)
+  # ansible.builtin.shell: cd "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_source_dest_dir }}" && git rev-parse --short=6 $(git rev-parse HEAD)
+  ansible.builtin.shell: cd "{{ azerothcore_checkout_path }}/{{ azerothcore_source_dir }}" && git rev-parse --short=6 $(git rev-parse HEAD)
   register: git_commit_tag
   tags:
     - build

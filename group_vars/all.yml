@@ -1,7 +1,12 @@
 ---
 # content folder - {{ home }}/{{ azerothcore_folder }}, this is optional and can be left blank
 # to create folders in the home-dir directly. Or it can be multiple folders.
+
+## Build server ##
 azerothcore_folder: "azerothcore-wotlk-source"
+azerothcore_checkout_path: "/opt/{{ azerothcore_folder }}"
+azerothcore_source_dir: "src"
+azerothcore_build_dir: "/opt/{{ azerothcore_folder }}/build"
 
 # Whether to use source code and compile
 # or pull pre-existing binaries instead
