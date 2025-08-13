@@ -6,6 +6,7 @@
     dest: "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_source_dest_dir }}/modules/{{ item.name }}"
     version: "{{ item.version }}"
     force: true
+    remote: "origin"
   loop: "{{ azerothcore_modules }}"
   tags:
     - modules

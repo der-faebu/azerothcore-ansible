@@ -11,19 +11,11 @@
 
 - name: Include task for building
   ansible.builtin.include_tasks: "tasks/build.yml"
-  when: azerothcore_deployment_type == 'source'
   tags:
     - build
 
-- name: Include task for local building
-  ansible.builtin.include_tasks: "tasks/local-build.yml"
-  when: azerothcore_build_type == 'local'
-  tags:
-    - local-build
-
 - name: Include task for downloading binaries
   ansible.builtin.include_tasks: "tasks/binary.yml"
-  when: azerothcore_deployment_type == 'binary'
   tags:
     - binary
 

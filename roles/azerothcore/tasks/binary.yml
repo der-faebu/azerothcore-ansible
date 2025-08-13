@@ -7,16 +7,23 @@
   loop:
     - "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_server_release }}/bin"
     - "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_server_release }}/bin/etc/modules"
+  become: true
+  tags:
+    - binary
 
 - name: Check if the worldserver has been downloaded
   ansible.builtin.stat:
     path: "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_server_release }}/bin/worldserver"
   register: worldserver_binary
+  tags:
+    - binary
 
 - name: Check if the authserver has been downloaded
   ansible.builtin.stat:
     path: "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_server_release }}/bin/authserver"
   register: authserver_binary
+  tags:
+    - binary
 
 - name: Copy the binaries
   ansible.builtin.copy:
@@ -24,20 +31,9 @@
     dest: "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_server_release }}/bin/"
     mode: "0770"
   when:
-    - not worldserver_binary.stat.exists and not authserver_binary.stat.exists
     - azerothcore_binary.path is defined
   loop:
     - "worldserver"
     - "authserver"
-
-- name: Download the binaries
-  ansible.builtin.get_url:
-    url: "{{ azerothcore_binary.url }}"
-    dest: "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_server_release }}/bin/"
-    mode: "0770"
-  when:
-    - not worldserver_binary.stat.exists and not authserver_binary.stat.exists
-    - azerothcore_binary.path is not defined and azerothcore_binary.url is defined
-  loop:
-    - "worldserver"
-    - "authserver"
+  tags:
+    - binary

@@ -7,6 +7,7 @@
     version: "{{ azerothcore_branch }}"
     force: "{{ azerothcore_git_force }}"
     single_branch: true
+    track_submodules: true
     depth: 1
   tags:
     - build

@@ -14,7 +14,7 @@ azerothcore_folder: "azerothcore-wotlk-source"
 
 azerothcore_binary:
   # path takes precedence over url
-  path: "../bin/{{ item }}"
+  path: "{{ root }}/bin/{{ item }}"
   url: "https://github.com/Upload-Academy/azerothcore-ansible/releases/download/v0.1.0/{{ item }}"
   use_precompiled: false
 # "source" is very slow but allows you to load custom modules.

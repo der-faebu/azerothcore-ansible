@@ -32,4 +32,3 @@
   delegate_to: "{{ azerothcore_build_server }}"
   tags:
     - build
-    - source
