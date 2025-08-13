@@ -34,7 +34,7 @@ azerothcore_user_ssh_keys:
   - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDH1ZRIYzldtBmfF7HLluU3U3j6DronkzDr9yNvevxPE faebu-admin@infra.gygax.tech"
 
 # $HOME
-home: "{{ ansible_env.HOME }}"
+home: "/home/{{ azerothcore_user }}"
 root: "{{ home }}/{{ azerothcore_folder }}/{{ azerothcore_server_release }}"
 temp: "{{ home }}/{{ azerothcore_folder }}/temp"
 sql_dir: "{{ home }}/{{ azerothcore_folder }}/sql"
@@ -69,7 +69,7 @@ azerothcore_service_group: "{{ azerothcore_user }}"
 
 # discard changes to the repo, yes or no
 azerothcore_git_force: "yes"
-azerothcore_server_release: "{{azerothcore_branch}}"
+azerothcore_server_release: "{{ azerothcore_branch }}"
 
 # compile tools (map-extraction etc.), '1' (true) or '0' (false)
 azerothcore_tools: "1"
@@ -115,7 +115,7 @@ azerothcore_modules:
     git: https://github.com/der-faebu/mod-playerbots.git
     version: master
     enabled: true
- 
+
   - name: mod-solocraft
     git: https://github.com/azerothcore/mod-solocraft.git
     version: master

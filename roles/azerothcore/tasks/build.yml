@@ -7,7 +7,6 @@
   delegate_to: "{{ azerothcore_build_server }}"
   tags:
     - build
-    - source
 
 - name: Move module DB scripts
   ansible.builtin.template:
@@ -17,7 +16,6 @@
   delegate_to: "{{ azerothcore_build_server }}"
   tags:
     - build
-    - source
 
 - name: Run our compile script
   ansible.builtin.shell: "./compile.sh > compile.log"
@@ -26,7 +24,6 @@
   delegate_to: "{{ azerothcore_build_server }}"
   tags:
     - build
-    - source
 
 - name: Run module DB scripts
   ansible.builtin.shell: "./copy_db_files.sh > copy_db_files.log"

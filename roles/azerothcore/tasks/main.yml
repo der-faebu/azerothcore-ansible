@@ -2,7 +2,7 @@
 - name: Include task for downloading the AzerothCore source
   ansible.builtin.include_tasks: "tasks/source.yml"
   tags:
-    - source
+    - build
 
 - name: Include task for downloading the AzerothCore modules
   ansible.builtin.include_tasks: "tasks/modules.yml"
